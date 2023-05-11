@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-slate-200 flex flex-col">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat server</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="">
+    <div class="fixed ring ring-4 ring-blue-800  flex flex-col inset-0">
+        <div class="max-w-lg m-6 rounded-md shadow-lg shadow-black bg-slate-100 p-4 overflow-hidden">
+            <form id="form" class=" flex gap-4 flex-col rounded">
+                <h2>Sender</h2>
+                <input name="sender" type="text" class="outline-none p-2" placeholder="Name" />
+                <h2>Message</h2>
+                <textarea name="message" rows="5" type="text" class="outline-none p-2" placeholder="Message"></textarea>
+                <input type="submit" class=" bg-sky-700 px-4 hover:bg-sky-500 text-white py-2 rounded" value="send" />
+            </form>
+        </div>
+    </div>
+    <script>
+
+        document.querySelector("#form").addEventListener('submit', handleSend)
+        function  handleSend(e) {
+            e.preventDefault()
+                console.log({
+                    message: e.target.message.value,
+                    sender: e.target.sender.value
+                })
+            fetch("http://localhost:8080/send", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({
+                    message: e.target.message.value,
+                    sender: e.target.sender.value
+                })
+            })
+                .then(response => {
+                    (response.status)
+                })
+        }
+    </script>
+</body>
+</html>
