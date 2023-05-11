@@ -19,27 +19,43 @@
     </div>
     <script>
 
+        const socket = new WebSocket("ws://"+window.location.host+"/message")
+
+        socket.onmessage = function(event) {
+            console.log("Received message: "+event.data)
+        }
+
+        socket.onopen = function(event) {
+            console.log("WebSocket connection opened!");
+        }
+
+        socket.onclose = (event) => {
+            console.log("WebSocket connection closed!");
+        }
+
         document.querySelector("#form").addEventListener('submit', handleSend)
         function  handleSend(e) {
             e.preventDefault()
-                console.log({
-                    message: e.target.message.value,
-                    sender: e.target.sender.value
-                })
-            fetch("http://localhost:8080/send", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                },
-                body: JSON.stringify({
-                    message: e.target.message.value,
-                    sender: e.target.sender.value
-                })
+            const message = JSON.stringify({
+                message: e.target.message.value,
+                sender: e.target.sender.value
             })
-                .then(response => {
-                    (response.status)
-                })
+
+            socket.send(message);
+            // fetch("http://localhost:8080/send", {
+            //     method: "POST",
+            //     headers: {
+            //         "Content-Type": "application/json",
+            //         "Accept": "application/json"
+            //     },
+            //     body: JSON.stringify({
+            //         message: e.target.message.value,
+            //         sender: e.target.sender.value
+            //     })
+            // })
+            //     .then(response => {
+            //         (response.status)
+            //     })
         }
     </script>
 </body>
