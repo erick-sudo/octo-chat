@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessageConsumerService {
 
-    private Channel channel;
+    private Long channelId = 0L;
 
-    @JmsListener(destination="channel${channel.getId()}")
+    @JmsListener(destination="channel")
     public void listener(String message) {
         String sender = message.substring(0, message.indexOf("|"));
         System.out.println("\nMessage from: "+sender+"\n--------------------------------");
@@ -17,6 +17,6 @@ public class MessageConsumerService {
     }
 
     public void setChannel(Channel channel) {
-        this.channel = channel;
+        this.channelId = channel.getId();
     }
 }

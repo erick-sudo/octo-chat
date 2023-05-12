@@ -15,6 +15,7 @@ public class MessageSendService {
     }
     public void sendMessage(String channel, String message) {
         // Send message to channel
-        jmsTemplate.convertAndSend(channel, message);
+        System.out.println(channel+ "----------------" + message);
+        //jmsTemplate.convertAndSend(channel, message);
     }
 }
