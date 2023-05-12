@@ -1,5 +1,7 @@
 package com.sender.scalene.controllers;
 
+import com.sender.scalene.models.Message;
+import com.sender.scalene.models.User;
 import com.sender.scalene.repos.ChannelRepository;
 import com.sender.scalene.repos.MessageRepository;
 import com.sender.scalene.repos.UserRepository;
@@ -7,7 +9,11 @@ import com.sender.scalene.service.MessageConsumerService;
 import com.sender.scalene.service.MessageSendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class ChatController {
@@ -26,11 +32,6 @@ public class ChatController {
     }
 
     @Autowired
-    public MessageRepository voidGetMessageRepository() {
-        return this.messageRepository;
-    }
-
-    @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -41,13 +42,20 @@ public class ChatController {
     }
 
     @GetMapping("/")
-    public String index() {
+    public String index(Model model) {
+        List<User> users = userRepository.findAll();
+        List<Message> messages = messageRepository.findAll();
+
+        model.addAttribute("users", users);
+        model.addAttribute("messages", messages);
         return "chat";
     }
 
-    @GetMapping("/chat/{channel}")
-    public String chat(@PathVariable Long channel) {
-        System.out.println(channel);
+    @GetMapping("/chat/{id}")
+    public String chat(@PathVariable Long id) {
+        List<User> users = userRepository.findAll();
+        List<Message> messages = messageRepository.findMessagesBy();
+        Optional<User> selecteduser = userRepository.findById(id);
         return "chat";
     }
 }

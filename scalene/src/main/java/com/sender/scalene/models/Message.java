@@ -12,21 +12,21 @@ public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    public Long id;
 
-    private String message;
+    public String message;
 
     @ManyToOne
     @JoinColumn(name = "sender_id")
-    private User sender;
+    public User sender;
 
     @ManyToOne
     @JoinColumn(name = "receiver_id")
-    private User receiver;
+    public User receiver;
 
     @ManyToOne
     @JoinColumn(name = "channel_id")
-    private Channel channel;
+    public Channel channel;
 
     public String getMessage() {
         return this.message;
