@@ -7,14 +7,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessageSendService {
 
-    // JMS Template used to send data through to the MMq Server
+    // JMS Template used to send data through to the MQ Server
     private JmsTemplate jmsTemplate;
     @Autowired
     public MessageSendService(JmsTemplate jmsTemplate) {
         this.jmsTemplate = jmsTemplate;
     }
-    public void sendMessage(String message) {{
-    }
-        jmsTemplate.convertAndSend("channel1", message);
+    public void sendMessage(String channel, String message) {
+        // Send message to channel
+        jmsTemplate.convertAndSend(channel, message);
     }
 }

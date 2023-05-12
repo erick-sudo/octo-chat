@@ -1,29 +1,32 @@
 package com.sender.scalene.controllers;
 
-import com.sender.scalene.models.Message;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import com.sender.scalene.repos.ChannelRepository;
+import com.sender.scalene.repos.MessageRepository;
+import com.sender.scalene.repos.UserRepository;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-//import org.springframework.web.bind.annotation.RestController;
-import com.sender.scalene.service.MessageSendService;
 
 @Controller
 public class ChatController {
 
-    @Autowired
-    private MessageSendService sendService;
+    private MessageRepository messageRepository;
+    private UserRepository userRepository;
+    private ChannelRepository channelRepository;
 
     @GetMapping("/")
-    public String index(Model model) {
-        return "index";
+    public String index() {
+        return "chat";
     }
 
-    @PostMapping("/chat")
-    public ResponseEntity<String> sendMessage(@RequestBody Message requestData ) {
-        // Service Class
-        sendService.sendMessage(requestData+"");
-        return ResponseEntity.ok("message sent successfully");
+    @GetMapping("/chat/{channel}")
+    public String chat(@PathVariable String channel) {
+        return "chat";
     }
+
+//    @PostMapping("/chat")
+//    public ResponseEntity<String> sendMessage(@RequestBody Message requestData ) {
+//        // Service Class
+//        sendService.sendMessage(requestData+"");
+//        return ResponseEntity.ok("message sent successfully");
+//    }
 }
