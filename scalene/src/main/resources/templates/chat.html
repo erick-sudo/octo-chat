@@ -11,28 +11,37 @@
     </style>
 </head>
 <body class="">
-    <div class="fixed ring ring-4 ring-blue-800  flex flex-col inset-0 bg-slate-400">
-        <div class="bg-blue-100 m-2 rounded-md">
-            <div class="flex">
-                <div class="scrolll flex flex-col overflow-y-scroll w-max h-96 m-4 border-r-2 border-white">
-                    <div th:each="user: ${users}" class="gap-2 border border-black/50 rounded-full p-2 w-max m-2">
-                        <div id="" th:onclick="''" th:text="${user.getUsername()}" class="bg-slate-300 font-bold flex items-center justify-center ring-4 hover:ring-blue-900 rounded-full w-24 h-24"></div>
-                    </div>
-                </div>
-                <div class="scrolll shadow-lg shadow-black/25 overflow-y-scroll flex-grow bg-slate-100/75 max-w-lg m-2 rounded">
-                    <h2 th:if="${selecteduser}" th:text="${selecteduser.username}"></h2>
-                    <div>
-
-                    </div>
-                </div>
-            </div>
-            <div class="max-w-lg m-6 rounded-md shadow-lg shadow-black/50 bg-slate-100 p-4 overflow-hidden">
-                <form id="form" class=" flex gap-4 flex-col rounded">
-                    <textarea name="message" rows="5" type="text" class="outline-none p-2" placeholder="Message"></textarea>
-                    <input type="submit" class=" bg-sky-700 px-4 hover:bg-sky-500 text-white py-2 rounded" value="send" />
-                </form>
-            </div>
+    <div class="fixed ring ring-4 ring-blue-800 justify-center flex inset-0 bg-slate-400">
+        <div class="absolute bg-slate-900 top-2 left-2 py-2 rounded-lg">
+            <a class="text-sm text-white font-bold py-2 px-4" href="/">HOME</a>
         </div>
+                <div class="scrolll flex flex-col overflow-y-scroll w-max m-4 border-2 border-slate-900 bg-slate-200 rounded-full">
+                    <div th:each="user: ${users}" class="gap-2 border border-black/50 rounded-full p-2 w-max m-2">
+                        <a id="" th:href="'/chat/'+${log.id}+'/'+${user.id}" th:text="${user.getUsername()}" class="block cursor-pointer text-white bg-slate-900 hover:bg-white hover:text-slate-900 font-bold flex items-center justify-center hover:ring-4 ring-slate-600 hover:ring-slate-900 rounded-full w-24 h-24"></a>
+                    </div>
+                </div>
+                <div class="scrolll flex flex-col border border-slate-900 shadow-lg shadow-black/25 overflow-y-scroll flex-grow bg-slate-100/75 max-w-lg m-2 rounded">
+                    <h2 class="px-8 pt-2 text-start text-xl bg-slate-900 text-white" th:if="${log != null}" th:text="${log.username}">-</h2>
+                    <h2 class="p-3 text-center bg-slate-900 text-white" th:if="${selecteduser != null}" th:text="${selecteduser.username}">-</h2>
+                    <div class="flex-grow p-2">
+                        <div th:each="message: ${messages}" class="">
+                            <div class="ml-[10%] flex justify-end" th:if="${message.sender.id == log.id}">
+                                <div class="rounded-lg rounded-t  rounded-bl bg-slate-900 text-white shadow-lg shadow-white p-3 m-2 w-max" th:text="${message.message}"></div>
+                            </div>
+                            <div class="mr-[10%] flex justify-start" th:if="${message.sender.id != log.id}">
+                                <div class="rounded-lg rounded-b rounded-tr bg-white shadow-lg shadow-slate-900 p-3 m-2 w-max" th:text="${message.message}"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="max-w-lg m-6 rounded-md shadow-lg shadow-black/50 bg-slate-100 p-4 overflow-hidden">
+                        <form th:if="${selecteduser != null}" id="form" th:onsubmit="'handleSend'" class=" flex gap-4 flex-col rounded">
+                            <input type="hidden" name="sender" th:value="${log.id}" />
+                            <input type="hidden" name="receiver" th:value="${selecteduser.id}" />
+                            <textarea name="message" rows="4" type="text" class="outline-none p-2" placeholder="Message"></textarea>
+                            <input type="submit" class="font-bold bg-slate-900 px-4 hover:bg-white hover:text-slate-900 hover:ring-4 hover:ring-slate-900 text-white py-2 rounded cursor-pointer" value="SEND" />
+                        </form>
+                    </div>
+                </div>
     </div>
     <script>
         const socket = new WebSocket("ws://"+window.location.host+"/message")
@@ -42,9 +51,10 @@
         }
 
         socket.onopen = function(event) {
-            socket.send(JSON.stringify({
-                "channel": "1"
-            }));
+            // socket.send(JSON.stringify({
+            //     "channel": "1"
+            // }));
+            console.log("WebSocket connection open!");
         }
 
         socket.onclose = (event) => {
@@ -54,12 +64,18 @@
         document.querySelector("#form").addEventListener('submit', handleSend)
         function  handleSend(e) {
             e.preventDefault()
-            const message = JSON.stringify({
+            const message = {
                 message: e.target.message.value,
-                sender: e.target.sender.value
-            })
+                sender_id: e.target.sender.value,
+                receiver_id: e.target.receiver.value
+            }
 
-            socket.send(message)
+            socket.send(`${message.message}|${message.sender_id}|${message.receiver_id}`)
+            location.reload()
+        }
+
+        function selectedUserHandler(rec) {
+            alert(rec)
         }
     </script>
 </body>

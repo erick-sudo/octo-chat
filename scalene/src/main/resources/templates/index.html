@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-slate-200 flex flex-col">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat server</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .scrolll::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="fixed flex justify-center items-center flex-col gap-4 inset-0 bg-slate-900">
+        <h2 class="text-[4em] font-bold text-white">Welcome</h2>
+<!--        <a href="#"><button class="font-bold hover:ring-4 hover:text-white hover:bg-slate-900 hover:ring-white bg-white px-8 py-2 rounded">Chat</button></a>-->
+        <div class="scrolll flex overflow-x-scroll w-max m-4">
+            <div th:each="user: ${users}"  class="scrolll overflow-x-scroll gap-2 border border-black-white rounded-full p-2 w-max m-2">
+                <a id="" th:href="'/chat/'+${user.id}+'/1'" th:text="${user.getUsername()}" class="block cursor-pointer text-white bg-slate-900 hover:bg-white hover:text-slate-900 font-bold flex items-center justify-center hover:ring-4 ring-slate-600 hover:ring-slate-900 rounded-full w-24 h-24"></a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

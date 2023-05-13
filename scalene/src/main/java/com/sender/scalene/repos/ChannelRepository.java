@@ -13,8 +13,8 @@ import java.util.Optional;
 @Repository
 public interface ChannelRepository extends JpaRepository<Channel, Long> {
 
-    @Query("SELECT m FROM Message m WHERE m.channel.id = :channelId")
-    List<Message> findAllMessagesByChannelId(Long channelId);
+//    @Query("SELECT m FROM Message m WHERE m.channel.id = :channelId")
+//    List<Message> findAllMessagesByChannelId(Long channelId);
 
     @Query("SELECT c FROM Channel c WHERE c.id = :id")
     Optional<Channel> findById(@Param("id") Long id);

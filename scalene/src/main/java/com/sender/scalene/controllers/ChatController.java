@@ -13,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class ChatController {
@@ -25,6 +24,8 @@ public class ChatController {
     // Active MQ services
     private MessageSendService sendService;
     private MessageConsumerService consumerService;
+
+    public Long loggedInUser = 1L;
 
     @Autowired
     public void setMessageRepository(MessageRepository messageRepository) {
@@ -44,18 +45,22 @@ public class ChatController {
     @GetMapping("/")
     public String index(Model model) {
         List<User> users = userRepository.findAll();
-        List<Message> messages = messageRepository.findAll();
-
         model.addAttribute("users", users);
-        model.addAttribute("messages", messages);
-        return "chat";
+        return "index";
     }
 
-    @GetMapping("/chat/{id}")
-    public String chat(@PathVariable Long id) {
+    @GetMapping("/chat/{sender}/{receiver}")
+    public String chat(@PathVariable Long sender, @PathVariable Long receiver, Model model) {
+        loggedInUser = sender;
         List<User> users = userRepository.findAll();
-        List<Message> messages = messageRepository.findMessagesBy();
-        Optional<User> selecteduser = userRepository.findById(id);
+        List<Message> messages = messageRepository.findMessages(sender, receiver);
+        User selecteduser = userRepository.findUser(receiver);
+        User log = userRepository.findUser(sender);
+
+        model.addAttribute("selecteduser", selecteduser);
+        model.addAttribute("users", users);
+        model.addAttribute("log", log);
+        model.addAttribute("messages", messages);
         return "chat";
     }
 }

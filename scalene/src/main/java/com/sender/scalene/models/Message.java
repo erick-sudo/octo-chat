@@ -1,11 +1,8 @@
 package com.sender.scalene.models;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.ManyToOne;
-import javax.persistence.JoinColumn;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import javax.persistence.*;
 
 @Entity
 public class Message {
@@ -24,10 +21,6 @@ public class Message {
     @JoinColumn(name = "receiver_id")
     public User receiver;
 
-    @ManyToOne
-    @JoinColumn(name = "channel_id")
-    public Channel channel;
-
     public String getMessage() {
         return this.message;
     }
@@ -37,9 +30,5 @@ public class Message {
     }
     public User getSender() {
         return this.sender;
-    }
-
-    public Channel getChannel() {
-        return this.channel;
     }
 }
